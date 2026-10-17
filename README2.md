@@ -207,23 +207,7 @@ Las operaciones inválidas (por ejemplo `Desapilar` sobre una pila vacía u `Obt
 | Clave inexistente | `"La clave no pertenece al diccionario"` |
 | Iterador finalizado | `"El iterador termino de iterar"` |
 
-## Tests
-
 Cada paquete incluye sus pruebas unitarias.
-
-```bash
-# Todos los TDAs
-go test ./...
-
-# Con cobertura
-go test ./... -cover
-
-# Un TDA puntual
-go test ./abb -v
-
-# Detector de condiciones de carrera
-go test ./... -race
-```
 
 ## Notas de diseño
 
@@ -231,14 +215,6 @@ go test ./... -race
 - **Encapsulamiento**: solo se exponen las interfaces y los constructores; las estructuras internas son privadas.
 - **Iteradores**: se ofrecen dos formas de recorrer, interna (`Iterar` con callback) y externa (`Iterador`).
 - **Sin dependencias externas**: solo la librería estándar de Go.
-
-## Contribuir
-
-1. Hacé un fork del repo.
-2. Creá una rama: `git checkout -b feature/nuevo-tda`
-3. Agregá tests para cualquier cambio.
-4. Verificá que pase `go test ./...` y `go vet ./...`.
-5. Abrí un Pull Request.
 
 ## Licencia
 
