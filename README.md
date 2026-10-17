@@ -1,6 +1,6 @@
 # Data Structures in Go
 
-🇦🇷 [Leer en español](README.md)
+🇦🇷 [Leer en español](README2.md)
 
 A collection of **Abstract Data Types (ADTs)** implemented from scratch in Go using generics. Each ADT exposes a clear interface and hides its internal implementation.
 
