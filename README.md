@@ -219,14 +219,6 @@ Each package ships with its own unit tests.
 - **Iterators**: two ways to traverse are provided, internal (`Iterar` with a callback) and external (`Iterador`).
 - **No external dependencies**: standard library only.
 
-## Contributing
-
-1. Fork the repository.
-2. Create a branch: `git checkout -b feature/new-adt`
-3. Add tests for any change.
-4. Make sure `go test ./...` and `go vet ./...` pass.
-5. Open a Pull Request.
-
 ## License
 
 Distributed under the MIT License. See [`LICENSE`](LICENSE) for details.
