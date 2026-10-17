@@ -1,20 +1,22 @@
-# TDAs en Go
+# Data Structures in Go
 
-Colección de **Tipos de Dato Abstractos** implementados desde cero en Go, usando genéricos. Cada TDA expone una interfaz clara y oculta su implementación interna.
+🇦🇷 [Leer en español](README.md)
+
+A collection of **Abstract Data Types (ADTs)** implemented from scratch in Go using generics. Each ADT exposes a clear interface and hides its internal implementation.
 
 ![Go](https://img.shields.io/badge/Go-1.21+-00ADD8?logo=go&logoColor=white)
 
-## Contenido
+## Contents
 
-| TDA | Paquete | Implementación | Descripción |
+| ADT | Package | Implementation | Description |
 |-----|---------|----------------|-------------|
-| Pila | `pila` | Dinámica (arreglo redimensionable) | LIFO: último en entrar, primero en salir |
-| Cola | `cola` | Enlazada | FIFO: primero en entrar, primero en salir |
-| Lista | `lista` | Enlazada | Secuencia con inserción/borrado en cualquier posición e iterador |
-| Diccionario | `diccionario` | Hash abierto (listas enlazadas) | Pares clave–valor con iterador |
-| Diccionario ordenado | `abb` | Árbol binario de búsqueda | Pares clave–valor ordenados por clave, con iterador en orden |
+| Stack | `pila` | Dynamic (resizable array) | LIFO: last in, first out |
+| Queue | `cola` | Linked | FIFO: first in, first out |
+| List | `lista` | Linked | Sequence with insertion/removal at any position and an iterator |
+| Dictionary | `diccionario` | Hash table (separate chaining) | Key–value pairs with an iterator |
+| Ordered dictionary | `abb` | Binary search tree (BST) | Key–value pairs sorted by key, with an in-order iterator |
 
-## Estructura del repositorio
+## Repository structure
 
 ```
 .
@@ -34,63 +36,64 @@ Colección de **Tipos de Dato Abstractos** implementados desde cero en Go, usand
 │   ├── abb.go
 │   └── abb_test.go
 ├── go.mod
-└── README.md
+├── README.md
+└── README.en.md
 ```
 
-## Instalación
+## Installation
 
 ```bash
-go get github.com/<usuario>/<repo>
+go get github.com/<user>/<repo>
 ```
 
-Y luego se importa el TDA que se necesite:
+Then import whichever ADT you need:
 
 ```go
 import (
-    "github.com/<usuario>/<repo>/pila"
-    "github.com/<usuario>/<repo>/cola"
-    "github.com/<usuario>/<repo>/lista"
-    "github.com/<usuario>/<repo>/diccionario"
-    "github.com/<usuario>/<repo>/abb"
+    "github.com/<user>/<repo>/pila"
+    "github.com/<user>/<repo>/cola"
+    "github.com/<user>/<repo>/lista"
+    "github.com/<user>/<repo>/diccionario"
+    "github.com/<user>/<repo>/abb"
 )
 ```
 
-## Interfaces y complejidad
+## Interfaces and complexity
 
-> Las firmas son orientativas: ajustalas a los nombres exactos de tu código.
+> Signatures are indicative: adjust them to match the exact names in the code.
 
-### Pila
+### Stack
 
 ```go
 type Pila[T any] interface {
     EstaVacia() bool
-    VerTope() T          // panic si está vacía
+    VerTope() T          // panics if empty
     Apilar(T)
-    Desapilar() T        // panic si está vacía
+    Desapilar() T        // panics if empty
 }
 ```
 
-| Operación | Complejidad |
-|-----------|-------------|
+| Operation | Complexity |
+|-----------|------------|
 | `EstaVacia`, `VerTope` | O(1) |
-| `Apilar`, `Desapilar` | O(1) amortizado |
+| `Apilar`, `Desapilar` | O(1) amortized |
 
-### Cola
+### Queue
 
 ```go
 type Cola[T any] interface {
     EstaVacia() bool
-    VerPrimero() T       // panic si está vacía
+    VerPrimero() T       // panics if empty
     Encolar(T)
-    Desencolar() T       // panic si está vacía
+    Desencolar() T       // panics if empty
 }
 ```
 
-| Operación | Complejidad |
-|-----------|-------------|
-| Todas | O(1) |
+| Operation | Complexity |
+|-----------|------------|
+| All | O(1) |
 
-### Lista
+### List
 
 ```go
 type Lista[T any] interface {
@@ -114,36 +117,36 @@ type IteradorLista[T any] interface {
 }
 ```
 
-| Operación | Complejidad |
-|-----------|-------------|
+| Operation | Complexity |
+|-----------|------------|
 | `InsertarPrimero`, `InsertarUltimo`, `BorrarPrimero`, `VerPrimero`, `VerUltimo`, `Largo` | O(1) |
-| `Iterar`, recorrido completo | O(n) |
-| Operaciones del iterador (`Insertar`, `Borrar`, `Siguiente`) | O(1) |
+| `Iterar`, full traversal | O(n) |
+| Iterator operations (`Insertar`, `Borrar`, `Siguiente`) | O(1) |
 
-### Diccionario (hash)
+### Dictionary (hash table)
 
 ```go
 type Diccionario[K comparable, V any] interface {
     Guardar(clave K, dato V)
     Pertenece(clave K) bool
-    Obtener(clave K) V   // panic si no existe
-    Borrar(clave K) V    // panic si no existe
+    Obtener(clave K) V   // panics if the key does not exist
+    Borrar(clave K) V    // panics if the key does not exist
     Cantidad() int
     Iterar(visitar func(clave K, dato V) bool)
     Iterador() IterDiccionario[K, V]
 }
 ```
 
-| Operación | Promedio | Peor caso |
-|-----------|----------|-----------|
+| Operation | Average | Worst case |
+|-----------|---------|------------|
 | `Guardar`, `Pertenece`, `Obtener`, `Borrar` | O(1) | O(n) |
 | `Iterar` | O(n + m)* | O(n + m)* |
 
-\* n = elementos, m = tamaño de la tabla.
+\* n = number of elements, m = table size.
 
-El hash usa **direccionamiento abierto con listas enlazadas** (encadenamiento) y redimensiona la tabla según el factor de carga.
+The hash table uses **separate chaining with linked lists** and resizes according to its load factor.
 
-### Diccionario ordenado (ABB)
+### Ordered dictionary (BST)
 
 ```go
 type DiccionarioOrdenado[K any, V any] interface {
@@ -153,18 +156,18 @@ type DiccionarioOrdenado[K any, V any] interface {
 }
 ```
 
-Se construye con una función de comparación:
+It is created with a comparison function:
 
 ```go
 dic := abb.CrearABB[string, int](strings.Compare)
 ```
 
-| Operación | Promedio | Peor caso (árbol degenerado) |
-|-----------|----------|------------------------------|
+| Operation | Average | Worst case (degenerate tree) |
+|-----------|---------|------------------------------|
 | `Guardar`, `Pertenece`, `Obtener`, `Borrar` | O(log n) | O(n) |
 | `Iterar` (in-order) | O(n) | O(n) |
 
-## Ejemplos de uso
+## Usage examples
 
 ```go
 package main
@@ -172,18 +175,18 @@ package main
 import (
     "fmt"
 
-    "github.com/<usuario>/<repo>/pila"
-    "github.com/<usuario>/<repo>/diccionario"
+    "github.com/<user>/<repo>/pila"
+    "github.com/<user>/<repo>/diccionario"
 )
 
 func main() {
-    // Pila
+    // Stack
     p := pila.CrearPilaDinamica[int]()
     p.Apilar(1)
     p.Apilar(2)
     fmt.Println(p.Desapilar()) // 2
 
-    // Diccionario
+    // Dictionary
     d := diccionario.CrearHash[string, int]()
     d.Guardar("a", 10)
     d.Guardar("b", 20)
@@ -191,32 +194,39 @@ func main() {
 
     d.Iterar(func(clave string, dato int) bool {
         fmt.Println(clave, dato)
-        return true // false corta la iteración
+        return true // returning false stops the iteration
     })
 }
 ```
 
-## Manejo de errores
+## Error handling
 
-Las operaciones inválidas (por ejemplo `Desapilar` sobre una pila vacía u `Obtener` de una clave inexistente) provocan un `panic` con un mensaje descriptivo, siguiendo la convención de los TDAs de la materia:
+Invalid operations (for example `Desapilar` on an empty stack, or `Obtener` with a missing key) trigger a `panic` with a descriptive message:
 
-| Situación | Mensaje |
+| Situation | Message |
 |-----------|---------|
-| Pila/cola vacía | `"La pila esta vacia"` / `"La cola esta vacia"` |
-| Lista vacía | `"La lista esta vacia"` |
-| Clave inexistente | `"La clave no pertenece al diccionario"` |
-| Iterador finalizado | `"El iterador termino de iterar"` |
+| Empty stack/queue | `"La pila esta vacia"` / `"La cola esta vacia"` |
+| Empty list | `"La lista esta vacia"` |
+| Missing key | `"La clave no pertenece al diccionario"` |
+| Exhausted iterator | `"El iterador termino de iterar"` |
 
-Cada paquete incluye sus pruebas unitarias.
+Each package ships with its own unit tests.
 
-## Notas de diseño
+## Design notes
 
-- **Genéricos**: los TDAs funcionan con cualquier tipo sin conversiones ni `interface{}`.
-- **Encapsulamiento**: solo se exponen las interfaces y los constructores; las estructuras internas son privadas.
-- **Iteradores**: se ofrecen dos formas de recorrer, interna (`Iterar` con callback) y externa (`Iterador`).
-- **Sin dependencias externas**: solo la librería estándar de Go.
+- **Generics**: the ADTs work with any type, with no conversions or `interface{}`.
+- **Encapsulation**: only interfaces and constructors are exposed; internal structs are private.
+- **Iterators**: two ways to traverse are provided, internal (`Iterar` with a callback) and external (`Iterador`).
+- **No external dependencies**: standard library only.
 
+## Contributing
 
-## Licencia
+1. Fork the repository.
+2. Create a branch: `git checkout -b feature/new-adt`
+3. Add tests for any change.
+4. Make sure `go test ./...` and `go vet ./...` pass.
+5. Open a Pull Request.
 
-Distribuido bajo la licencia MIT. Ver [`LICENSE`](LICENSE) para más información.
+## License
+
+Distributed under the MIT License. See [`LICENSE`](LICENSE) for details.
